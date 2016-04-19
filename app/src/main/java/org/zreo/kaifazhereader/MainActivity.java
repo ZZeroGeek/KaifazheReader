@@ -3,25 +3,47 @@ package org.zreo.kaifazhereader;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
+    private LayoutInflater mInflater;
+    private List<String> mTitleList = new ArrayList<>();//页卡标题集合
+    private View view1, view2, view3, view4, view5;//页卡视图
+    private List<View> mViewList = new ArrayList<>();//页卡视图集合
+    private ViewPager mViewPager;
+    private SimpleFragmentPagerAdapter pagerAdapter;
     Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mViewPager = (ViewPager) findViewById(R.id.vp_view);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+
+        pagerAdapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager(), this);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        mViewPager.setAdapter(pagerAdapter);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
         initToolbar();
         initInstances();
     }
@@ -35,11 +57,6 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.setDrawerListener(drawerToggle);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 2"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 3"));
-
     }
     @Override
     public void onPostCreate(Bundle savedInstanceState) {
@@ -67,4 +84,5 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
