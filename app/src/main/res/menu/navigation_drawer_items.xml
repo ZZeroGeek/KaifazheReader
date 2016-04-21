@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/item1">
+        <item
+            android:id="@+id/navItem1"
+            android:icon="@drawable/nav_icon_home"
+            android:title="首页"/>
+        </group>
+    <group android:id="@+id/item2">
+        <item
+            android:id="@+id/navItem2"
+            android:icon="@drawable/nav_icon_gift"
+            android:title="礼物兑换"/>
+        </group>
+    <group android:id="@+id/item3">
+        <item
+            android:id="@+id/navItem3"
+            android:icon="@drawable/nav_icon_my_shares"
+            android:title="我的分享"/>
+        <item
+            android:id="@+id/navItem4"
+            android:icon="@drawable/nav_icon_subscribed_subjects"
+            android:title="我的订阅"/>
+         <item
+             android:id="@+id/navItem5"
+             android:icon="@drawable/nav_icon_favorite"
+            android:title="我的收藏"/>
+         </group>
+    <group android:id="@+id/item4">
+        <item
+            android:id="@+id/navItem6"
+            android:icon="@drawable/nav_icon_create_subject"
+            android:title="立即建立主题"/>
+        <item
+            android:id="@+id/navItem7"
+            android:icon="@drawable/nav_icon_created_subjects"
+            android:title="我创建的主题"/>
+        </group>
+    <group android:id="@+id/item5">
+        <item
+            android:id="@+id/navItem8"
+            android:icon="@drawable/nav_icon_feedback"
+            android:title="意见反馈"/>
+        <item
+            android:id="@+id/navItem9"
+            android:icon="@drawable/nav_icon_cooperation"
+            android:title="合作申请"/>
+    </group>
+    <group android:id="@+id/item6">
+        <item
+            android:id="@+id/navItem10"
+            android:icon="@drawable/nav_icon_settings"
+            android:title="设置"/>
+        </group>
+</menu>
