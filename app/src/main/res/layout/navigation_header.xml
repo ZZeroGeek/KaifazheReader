@@ -5,19 +5,77 @@
               android:background="?attr/colorPrimaryDark"
               android:gravity="center"
               android:orientation="vertical"
-              android:padding="16dp"
+
               android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_weight="1"
+              android:orientation="vertical"
+              >
+        <Button
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="登录/注册"
+            android:background="#060606"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="19sp"
+            android:layout_gravity="center_horizontal" />
+          </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="#ffffff"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        >
+
+                        <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginTop="15dp"
+
+                        android:text="昨日收益"
+                        android:id="@+id/textView2"
+                        />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="40dp"
+                            android:layout_marginTop="-18dp"
+
+                            android:text="IO币总额"
+                            android:id="@+id/textView"
+                            android:layout_gravity="right" />
 
 
-    <Button
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="登录/注册"
-        android:background="#060606"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="19sp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

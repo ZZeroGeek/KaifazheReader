@@ -55,15 +55,15 @@
             android:orientation="vertical"
             android:paddingTop="24dp">
 
-            <include layout="@layout/list_item_card_detail"/>
+            <!--<include layout="@layout/list_item_card_detail"/>-->
 
-            <include layout="@layout/list_item_card_detail"/>
+            <!--<include layout="@layout/list_item_card_detail"/>-->
 
-            <include layout="@layout/list_item_card_detail"/>
+            <!--<include layout="@layout/list_item_card_detail"/>-->
 
-            <include layout="@layout/list_item_card_detail"/>
+            <!--<include layout="@layout/list_item_card_detail"/>-->
 
-            <include layout="@layout/list_item_card_detail"/>
+            <!--<include layout="@layout/list_item_card_detail"/>-->
 
         </LinearLayout>
 
