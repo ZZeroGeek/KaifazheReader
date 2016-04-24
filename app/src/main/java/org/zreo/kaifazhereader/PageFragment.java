@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
@@ -73,18 +75,19 @@ public class PageFragment extends Fragment {
             //   initDatas();//初始化数据
             mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swiperefreshlayout);
             mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
-            mSwipeRefreshLayout.setOnRefreshListener((SwipeRefreshLayout.OnRefreshListener) getContext());
+         //   mSwipeRefreshLayout.setOnRefreshListener((SwipeRefreshLayout.OnRefreshListener) getContext());
             mRecyclerView = (RecyclerView) view.findViewById(R.id.id_recyclerView);
             //   mAdapter = new SimpleRecyclerViewAdapter(getContext(), mDatas);//为适配器传入上下文和数据
             //   mRecyclerView.setAdapter(mAdapter);//使用适配器
             //LayoutManager进行布局管理
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false) {
                 protected int getExtraLayoutSpace(RecyclerView.State state) {
-                    return 2000;
+                    return 3000;
                 }
             };//第二个参数是说明这是垂直的布局
             mRecyclerView.setLayoutManager(linearLayoutManager);//通过LayoutManager控制显示风格
             mDatas = new ArrayList<>();
+
             mSwipeRefreshLayout.post(new Runnable() {
 
                 @Override
@@ -92,8 +95,32 @@ public class PageFragment extends Fragment {
                     mSwipeRefreshLayout.setRefreshing(true);
                 }
             });
-            loadData();
 
+            loadData();
+            mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    // TODO Auto-generated method stub
+                   Toast.makeText(getContext(),"刷新开始",Toast.LENGTH_LONG).show();
+                    if (mSwipeRefreshLayout.isRefreshing()==true)
+                        getActivity().runOnUiThread(new Runnable() {
+                            //  mSwipeRefreshLayout.setRefreshing(true);
+
+                            public void run() {
+                                mDatas = new ArrayList<>();
+                                mDatas.clear();
+                                int index = mDatas.size();
+                                for (int i = index; i < index + 20; i++) {
+                                    mDatas.add("新的第" + i + "个数据");
+                                }
+                                setAdapter();
+                                mSwipeRefreshLayout.setRefreshing(false);
+                                Toast.makeText(getContext(), "刷新中", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    Toast.makeText(getContext(),"刷新结束",Toast.LENGTH_LONG).show();
+                }
+            });
         }
          else if(mPage==2){
             view = inflater.inflate(R.layout.fragment_page2, container, false);
@@ -143,10 +170,7 @@ public class PageFragment extends Fragment {
             mAdapter.notifyDataSetChanged();
         }
     }
-    public void onRefresh() {
-        mDatas.clear();
-        loadData();
-    }
+
     private void loadData() {
         new Thread() {
             @Override
@@ -157,6 +181,35 @@ public class PageFragment extends Fragment {
                     int index = mDatas.size();
                     for (int i = index; i < index + 20; i++) {
                         mDatas.add("第" + i + "个数据");
+                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setAdapter();
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+        }.start();
+
+    }
+    private void loadData1() {
+        new Thread() {
+            @Override
+            public void run() {
+
+                try {
+                    Thread.sleep(2000);
+                    int index = mDatas.size();
+                    for (int i = index; i < index + 20; i++) {
+                        mDatas.add("新的第" + i + "个数据");
                     }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
