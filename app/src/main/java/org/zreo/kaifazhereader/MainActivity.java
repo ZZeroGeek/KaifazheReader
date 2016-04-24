@@ -2,6 +2,7 @@ package org.zreo.kaifazhereader;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -12,10 +13,13 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,21 +31,26 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     private DrawerLayout mDrawerLayout;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
+    private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private List<String> mDatas;
+    private List<String> mData;
+    private SimpleRecyclerViewAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+       // recyclerViewIn();
         final ActionBar ab = getSupportActionBar();
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
         ab.setDisplayHomeAsUpEnabled(true);
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer);
         NavigationView navigationView =
                 (NavigationView) findViewById(R.id.nv_main_navigation);
@@ -49,17 +58,87 @@ public class MainActivity extends AppCompatActivity {
         if (navigationView != null) {
             setupDrawerContent(navigationView);
         }
-//            此处为FAB的实现
-
         //获取viewpager，并对viewpager设置
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager();
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    public void recyclerViewIn() {
+        //   initDatas();//初始化数据
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefreshlayout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mRecyclerView = (RecyclerView) findViewById(R.id.id_recyclerView);
+        //   mAdapter = new SimpleRecyclerViewAdapter(getContext(), mDatas);//为适配器传入上下文和数据
+        //   mRecyclerView.setAdapter(mAdapter);//使用适配器
+        //LayoutManager进行布局管理
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false) {
+            protected int getExtraLayoutSpace(RecyclerView.State state) {
+                return 6000;
+            }
+        };//第二个参数是说明这是垂直的布局
+        mRecyclerView.setLayoutManager(linearLayoutManager);//通过LayoutManager控制显示风格
+        mDatas = new ArrayList<>();
+        mSwipeRefreshLayout.post(new Runnable() {
+
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        loadData();
+
+
+    }
+
+
+
+    private void loadData() {
+        new Thread() {
+            @Override
+            public void run() {
+
+                try {
+                    Thread.sleep(5000);
+                    int index = mDatas.size();
+                    for (int i = index; i < index + 20; i++) {
+                        mDatas.add("第" + i + "个数据");
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setAdapter();
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }.start();
+    }
+
+    private void setAdapter() {
+        if (mAdapter == null) {
+            mAdapter = new SimpleRecyclerViewAdapter(this, mDatas);//为适配器传入上下文和数据
+            mRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public void onRefresh() {
+        mDatas.clear();
+        loadData();
     }
 
     @Override
@@ -71,7 +150,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-        //重写setupViewPager方法；并填充选项卡TabLayout
+
+    //重写setupViewPager方法；并填充选项卡TabLayout
     private void setupViewPager() {
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         List<String> titles = new ArrayList<>();
@@ -104,5 +184,12 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+    }
+
+    public void initData() {
+        mDatas = new ArrayList<String>();
+        for (int i = 0; i < 20; i++) {
+            mDatas.add("这是第" + i + "行");
+        }
     }
 }
