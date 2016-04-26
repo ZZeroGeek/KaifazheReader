@@ -7,6 +7,8 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
@@ -19,14 +21,16 @@ public class GuideActivity extends Activity implements ViewPager.OnPageChangeLis
     private ViewPagerAdapter vpAdapter;
     private ArrayList<View> views;
     private View view1, view2, view3, view4;
-
-
+    private static final int[] page = {R.layout.guide_view01,R.layout.guide_view02,R.layout.guide_view03,R.layout.guide_view04};
+    private ImageView[] bar;
+    private int currentIndex;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide);
         initView();
         initData();
+
     }
 
     private void initView() {
@@ -57,10 +61,48 @@ public class GuideActivity extends Activity implements ViewPager.OnPageChangeLis
             }
         });
         vpAdapter.notifyDataSetChanged();
+        initPoint();
     }
 
     private void initPoint() {
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.ll);
+
+        bar = new ImageView[page.length];
+
+        for (int i = 0; i < page.length; i++) {
+            bar[i] = (ImageView) linearLayout.getChildAt(i);
+            bar[i].setEnabled(true);
+            bar[i].setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v) {
+                    int position = (Integer)v.getTag();
+                    setCurDot(position);
+//                    setCurView(position);
+                         }
+            });
+            bar[i].setTag(i);
+        }
+
+        currentIndex = 0;
+        bar[currentIndex].setEnabled(false);
     }
+//    private void setCurView(int position){
+//        if (position < 0 || position >= page.length) {
+//            return;
+//        }
+//        mViewPager.setCurrentItem(position);
+//    }
+    private void setCurDot(int positon){
+        if (positon < 0 || positon > page.length - 1 || currentIndex == positon) {
+            return;
+        }
+        bar[positon].setEnabled(false);
+        bar[currentIndex].setEnabled(true);
+
+//        currentIndex = positon;
+        mViewPager.setCurrentItem(currentIndex);
+    }
+
+
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -82,5 +124,5 @@ public class GuideActivity extends Activity implements ViewPager.OnPageChangeLis
         startActivity(intent);
         this.finish();
     }
+ }
 
-}

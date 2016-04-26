@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         if (navigationView != null) {
             setupDrawerContent(navigationView);
         }
-//            此处为FAB的实现
 
         //获取viewpager，并对viewpager设置
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -61,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_search);
+        item.setVisible(true);
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -71,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-        //重写setupViewPager方法；并填充选项卡TabLayout
+        //重写setupViewPager方法；并填充选项卡TabLayout标题
     private void setupViewPager() {
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         List<String> titles = new ArrayList<>();
@@ -105,4 +110,5 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }
