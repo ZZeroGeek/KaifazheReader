@@ -19,7 +19,7 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         //调用我的Fragment显示RecyclerView
-        return  PageFragment.newInstance(position+1);
+        return  PageFragment.newInstance(position);
     }
 
     @Override

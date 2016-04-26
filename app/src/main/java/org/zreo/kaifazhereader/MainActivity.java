@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private TabLayout mTabLayout;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private List<String> mDatas;
+    private List<SaveNews> mDatas;
     private List<String> mData;
     private SimpleRecyclerViewAdapter mAdapter;
 
@@ -107,10 +107,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
                 try {
                     Thread.sleep(5000);
-                    int index = mDatas.size();
-                    for (int i = index; i < index + 20; i++) {
-                        mDatas.add("第" + i + "个数据");
-                    }
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -186,10 +183,5 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 });
     }
 
-    public void initData() {
-        mDatas = new ArrayList<String>();
-        for (int i = 0; i < 20; i++) {
-            mDatas.add("这是第" + i + "行");
-        }
-    }
+
 }

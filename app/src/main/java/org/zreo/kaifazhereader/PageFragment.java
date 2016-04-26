@@ -31,8 +31,9 @@ public class PageFragment extends Fragment {
    private int mPage;
     private SimpleRecyclerViewAdapter mAdapter;
     private RecyclerView mRecyclerView;
-    private List<String> mDatas;
+    private List<SaveNews> mDatas;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    /*
    private Handler handler=new Handler() {
        @Override
        public void close() {
@@ -53,6 +54,7 @@ public class PageFragment extends Fragment {
            mSwipeRefreshLayout.setRefreshing(false);
        }
    };
+   */
     public static PageFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
@@ -70,7 +72,7 @@ public class PageFragment extends Fragment {
    //初始化页卡要显示的内容
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view=null;
-        if(mPage==1) {
+        if(mPage==0) {
             view = inflater.inflate(R.layout.fragment_page, container, false);
             //   initDatas();//初始化数据
             mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swiperefreshlayout);
@@ -102,7 +104,8 @@ public class PageFragment extends Fragment {
                 public void onRefresh() {
                     // TODO Auto-generated method stub
                    Toast.makeText(getContext(),"刷新开始",Toast.LENGTH_LONG).show();
-                    if (mSwipeRefreshLayout.isRefreshing()==true)
+                  //  if (mSwipeRefreshLayout.isRefreshing()==true){}
+                        /*
                         getActivity().runOnUiThread(new Runnable() {
                             //  mSwipeRefreshLayout.setRefreshing(true);
 
@@ -118,11 +121,12 @@ public class PageFragment extends Fragment {
                                 Toast.makeText(getContext(), "刷新中", Toast.LENGTH_LONG).show();
                             }
                         });
+                        */
                     Toast.makeText(getContext(),"刷新结束",Toast.LENGTH_LONG).show();
                 }
             });
         }
-         else if(mPage==2){
+         else if(mPage==1){
             view = inflater.inflate(R.layout.fragment_page2, container, false);
              mRecyclerView = (RecyclerView)view. findViewById(R.id.id_recyclerView);
              /*
@@ -157,11 +161,13 @@ public class PageFragment extends Fragment {
                 }
             });
 
-        }else if(mPage==3){
+        }else if(mPage==2){
             view = inflater.inflate(R.layout.fragment_page3, container, false);
         }
         return view;
     }
+
+
     private void setAdapter() {
         if (mAdapter == null) {
             mAdapter = new SimpleRecyclerViewAdapter(getContext(), mDatas);//为适配器传入上下文和数据
@@ -178,10 +184,7 @@ public class PageFragment extends Fragment {
 
                 try {
                     Thread.sleep(2000);
-                    int index = mDatas.size();
-                    for (int i = index; i < index + 20; i++) {
-                        mDatas.add("第" + i + "个数据");
-                    }
+                     saveYouNews();
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -200,6 +203,7 @@ public class PageFragment extends Fragment {
         }.start();
 
     }
+
     private void loadData1() {
         new Thread() {
             @Override
@@ -207,10 +211,7 @@ public class PageFragment extends Fragment {
 
                 try {
                     Thread.sleep(2000);
-                    int index = mDatas.size();
-                    for (int i = index; i < index + 20; i++) {
-                        mDatas.add("新的第" + i + "个数据");
-                    }
+                   //这里需要填充新闻
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -222,12 +223,19 @@ public class PageFragment extends Fragment {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
-
             }
-
         }.start();
+    }
+    public void saveYouNews(){
+        mDatas=new ArrayList<SaveNews>();
+     //   SaveNews saveNews=new SaveNews("详解应对平台高并发的分布式调度框架TBSchedule",R.drawable.news1,"来自 开发分享",R.drawable.ic_item_comment,R.drawable.ic_item_like,"666","666");
+        mDatas.add(new SaveNews("详解应对平台高并发的分布式调度框架TBSchedule",R.drawable.news_1,"来自 开发分享",R.drawable.ic_item_comment,R.drawable.ic_item_like,"666","666"));
+        mDatas.add(new SaveNews("互联网服务端技术——如何学（上）",R.drawable.news_2,"来自 全栈感知营的主题",R.drawable.ic_item_comment,R.drawable.ic_item_like,"666","666"));
+        mDatas.add(new SaveNews("如何优雅的使用 phpStorm 开发工具",R.drawable.news_3,"来自 Code Collection",R.drawable.ic_item_comment,R.drawable.ic_item_like,"666","666"));
+        mDatas.add(new SaveNews("全栈工程师的黑魔法（文档篇）",R.drawable.news_4,"来自 Phodal",R.drawable.ic_item_comment,R.drawable.ic_item_like,"666","666"));
+        mDatas.add(new SaveNews("『 Spark 』5. 这些年，你不能错过的 spark 学习资源",R.drawable.news_5,"来自 大数据那些事",R.drawable.ic_item_comment,R.drawable.ic_item_like,"666","666"));
+        mDatas.add(new SaveNews("Go性能优化技巧 1/10",R.drawable.news_6,"来自 大数据那些事",R.drawable.ic_item_comment,R.drawable.ic_item_like,"666","666"));
+        mDatas.add(new SaveNews("底部导航栏（Bottom navigation）设计规范指南",R.drawable.news_7,"来自 尤条子",R.drawable.ic_item_comment,R.drawable.ic_item_like,"666","666"));
 
     }
-
 }
