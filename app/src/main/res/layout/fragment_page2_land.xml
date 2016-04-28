@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools">
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:text="去订阅主题"
+        android:textSize="15sp"
+        android:id="@+id/law"
+        android:textColor="#f9f7f7"
+        android:background="@drawable/shape_button_land"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="您还没有订阅的内容"
+        android:textColor="#CCC"
+        android:textSize="15sp"
+        android:layout_marginBottom="28dp"
+        android:id="@+id/textView3"
+        android:layout_above="@+id/law"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

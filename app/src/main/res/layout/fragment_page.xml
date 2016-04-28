@@ -6,15 +6,45 @@
     android:id="@+id/swiperefreshlayout"
 
     >
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:id="@+id/id_recyclerView"
+       android:layout_marginTop="200dp"
         >
 
     </android.support.v7.widget.RecyclerView>
+</RelativeLayout>
 
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+        <!-- ViewPager是一个控件 -->
+        <android.support.v4.view.ViewPager
+            android:id="@+id/adv_pager"
+            android:layout_width="fill_parent"
+            android:layout_height="160dp" >
+
+        </android.support.v4.view.ViewPager>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/home_default_image"/>
+        <LinearLayout
+            android:id="@+id/viewGroup"
+            android:layout_below="@id/adv_pager"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-25px"
+            android:gravity="right"
+            android:orientation="horizontal" >
+        </LinearLayout>
+    </RelativeLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout  >

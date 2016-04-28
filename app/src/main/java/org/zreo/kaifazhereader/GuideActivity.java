@@ -111,7 +111,7 @@ public class GuideActivity extends Activity implements ViewPager.OnPageChangeLis
 
     @Override
     public void onPageSelected(int position) {
-
+        setCurDot(position);
     }
 
     @Override

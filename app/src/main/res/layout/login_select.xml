@@ -4,17 +4,41 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/toolbar1"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="60dp"
         android:background="?attr/colorPrimary"
         app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/land_list"
+        android:id="@+id/landList"
         android:layout_below="@+id/toolbar"
+        android:layout_marginTop="60dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"></ListView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="登录"
+        android:textSize="20dp"
+        android:textColor="@color/colorAccent"
+        android:id="@+id/textView5"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/backButton"
+        android:layout_toEndOf="@+id/backButton"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp" />
+    <Button
+        android:layout_width="30dp"
+        android:layout_height="25dp"
+        android:layout_above="@+id/toolbar1"
+        android:id="@+id/backButton"
+        android:background="@drawable/abc_ic_ab_back_mtrl_am_alpha"
+         android:layout_marginLeft="10dp"
+        android:layout_alignBottom="@+id/textView5"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

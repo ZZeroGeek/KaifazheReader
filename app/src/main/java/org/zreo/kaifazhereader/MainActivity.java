@@ -1,7 +1,13 @@
 package org.zreo.kaifazhereader;
 
+
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -21,17 +27,25 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+import java.util.logging.LogRecord;
+
+public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -40,6 +54,15 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private List<SaveNews> mDatas;
     private List<String> mData;
     private SimpleRecyclerViewAdapter mAdapter;
+    private Button headerLandButton;
+    Intent intent;
+ private View navigation_header;
+    private NavigationView nv_main_navigation;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-       // recyclerViewIn();
         final ActionBar ab = getSupportActionBar();
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
         ab.setDisplayHomeAsUpEnabled(true);
@@ -61,6 +83,22 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         //获取viewpager，并对viewpager设置
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+      nv_main_navigation=(NavigationView)findViewById(R.id.nv_main_navigation);
+        View headerView = nv_main_navigation.getHeaderView(0);
+        headerLandButton= (Button) headerView.findViewById(R.id.headerLandButton);
+        headerLandButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent=new Intent(MainActivity.this,LandActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
 
     }
 
@@ -70,73 +108,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         return true;
     }
 
-    public void recyclerViewIn() {
-        //   initDatas();//初始化数据
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefreshlayout);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        mRecyclerView = (RecyclerView) findViewById(R.id.id_recyclerView);
-        //   mAdapter = new SimpleRecyclerViewAdapter(getContext(), mDatas);//为适配器传入上下文和数据
-        //   mRecyclerView.setAdapter(mAdapter);//使用适配器
-        //LayoutManager进行布局管理
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false) {
-            protected int getExtraLayoutSpace(RecyclerView.State state) {
-                return 6000;
-            }
-        };//第二个参数是说明这是垂直的布局
-        mRecyclerView.setLayoutManager(linearLayoutManager);//通过LayoutManager控制显示风格
-        mDatas = new ArrayList<>();
-        mSwipeRefreshLayout.post(new Runnable() {
-
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(true);
-            }
-        });
-        loadData();
-
-
-    }
-
-
-
-    private void loadData() {
-        new Thread() {
-            @Override
-            public void run() {
-
-                try {
-                    Thread.sleep(5000);
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            setAdapter();
-                            mSwipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-        }.start();
-    }
-
-    private void setAdapter() {
-        if (mAdapter == null) {
-            mAdapter = new SimpleRecyclerViewAdapter(this, mDatas);//为适配器传入上下文和数据
-            mRecyclerView.setAdapter(mAdapter);
-        } else {
-            mAdapter.notifyDataSetChanged();
-        }
-    }
-
-    public void onRefresh() {
-        mDatas.clear();
-        loadData();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -163,18 +134,25 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         fragments.add(new ListFragment());
         fragments.add(new ListFragment());
         //获取FragmentAdapter，调用ViewPager
-        FragmentAdapter adapter =
-                new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
+        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
         mViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabsFromPagerAdapter(adapter);
+        SharedPreferences sp=getSharedPreferences("flag",MODE_PRIVATE);
+        Boolean flag=sp.getBoolean("flag",false);
+        if(flag) {
+            mViewPager.setCurrentItem(1);
+        }
     }
+
 
     //重写NavigationView
     public void setupDrawerContent(NavigationView navigationView) {
+
         navigationView.setNavigationItemSelectedListener(
+
                 new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
+
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
@@ -184,4 +162,43 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://org.zreo.kaifazhereader/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://org.zreo.kaifazhereader/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
 }
