@@ -66,7 +66,9 @@ public class LandActivity extends AppCompatActivity implements DialogInterface.O
                         SharedPreferences.Editor ed=sp.edit();
                         ed.putBoolean("flag",true);
                         ed.commit();
+                        String flagNew="intent to 2";
                         intent =new Intent(LandActivity.this,MainActivity.class);
+                        intent.putExtra("intent to 2",flagNew);
                         startActivity(intent);
                         }
                     });

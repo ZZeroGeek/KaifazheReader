@@ -139,8 +139,14 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabsFromPagerAdapter(adapter);
         SharedPreferences sp=getSharedPreferences("flag",MODE_PRIVATE);
+        Intent intent=getIntent();
+        String flagNew=intent.getStringExtra("intent to 2");
+        if(flagNew==null)
+        {
+            flagNew="123";
+        }
         Boolean flag=sp.getBoolean("flag",false);
-        if(flag) {
+        if(flag&&flagNew.equals("intent to 2")) {
             mViewPager.setCurrentItem(1);
         }
     }

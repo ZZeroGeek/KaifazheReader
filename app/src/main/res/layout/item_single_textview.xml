@@ -28,7 +28,7 @@
     style="@style/Base.TextAppearance.AppCompat.Body2"
     android:maxLines="2"
     android:layout_centerVertical="true" />
-    <ImageView
+    <org.zreo.kaifazhereader.CircleImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/newsImage"

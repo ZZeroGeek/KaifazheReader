@@ -50,7 +50,7 @@ public class SimpleRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder
 class MyViewHolder extends RecyclerView.ViewHolder {
 
     TextView newsText;
-    ImageView newsImage;
+    CircleImageView newsImage;
     TextView resource;
     ImageView itemComment;
     ImageView itemLike;
@@ -60,7 +60,7 @@ class MyViewHolder extends RecyclerView.ViewHolder {
     public MyViewHolder(View view) {
         super(view);
         newsText=(TextView)view.findViewById(R.id.newsText);
-        newsImage= (ImageView) view.findViewById(R.id.newsImage);
+        newsImage= (CircleImageView) view.findViewById(R.id.newsImage);
         resource= (TextView) view.findViewById(R.id.newsRresource);
         itemComment=(ImageView)view.findViewById(R.id.ic_item_comment);
         itemLike= (ImageView) view.findViewById(R.id.ic_item_like);
