@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ import java.util.logging.LogRecord;
 /**
  * Created by 85789 on 2016/4/19.
  */
-public class PageFragment extends Fragment {
+public class PageFragment extends Fragment implements ViewPager.OnPageChangeListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
    private int mPage;
@@ -48,12 +49,14 @@ public class PageFragment extends Fragment {
     private Button landButton;
     Intent intent;
 
-
-    private ImageView[] imageViews = null;
-    private ImageView imageView = null;
-    private ViewPager advPager = null;
-    private AtomicInteger what = new AtomicInteger(0);
-    private boolean isContinue = true;
+    private Button startButton;
+    private ViewPager mViewPager;
+    private ViewPagerAdapter vpAdapter;
+    private ArrayList<View> views;
+    private View view1, view2, view3, view4;
+    private static final int[] page = {R.layout.guide_view01,R.layout.guide_view02,R.layout.guide_view03,R.layout.guide_view04};
+    private ImageView[] bar;
+    private int currentIndex;
 
     public static PageFragment newInstance(int page) {
         Bundle args = new Bundle();
@@ -81,6 +84,58 @@ public class PageFragment extends Fragment {
           //  mDefaultImage.setVisibility(View.GONE);
            // advPager.setVisibility(View.VISIBLE);
 
+          //  LayoutInflater mLi = LayoutInflater.from(getContext());
+         //   view1 = mLi.inflate(R.layout.guide_view01, null);
+         //   view2 = mLi.inflate(R.layout.guide_view02, null);
+         //   view3 = mLi.inflate(R.layout.guide_view03, null);
+         //   view4 = mLi.inflate(R.layout.guide_view04, null);
+            mViewPager = (ViewPager) view.findViewById(R.id.viewpager1);
+            views = new ArrayList<View>();
+            ImageView img1 = new ImageView(getContext());
+            img1.setBackgroundResource(R.drawable.tutorial_1);
+            views.add(img1);
+            ImageView img2 = new ImageView(getContext());
+            img2.setBackgroundResource(R.drawable.tutorial_2);
+            views.add(img2);
+            ImageView img3 = new ImageView(getContext());
+            img3.setBackgroundResource(R.drawable.tutorial_3);
+            views.add(img3);
+            ImageView img4 = new ImageView(getContext());
+            img4.setBackgroundResource(R.drawable.tutorial_4);
+            views.add(img4);
+            vpAdapter = new ViewPagerAdapter(views);
+
+            mViewPager.addOnPageChangeListener(this);
+            mViewPager.setAdapter(vpAdapter);
+       //     views.add(view1);
+       //     views.add(view2);
+         //   views.add(view3);
+         //   views.add(view4);
+            vpAdapter.notifyDataSetChanged();
+
+
+
+            LinearLayout linearLayout = (LinearLayout)view. findViewById(R.id.we);
+            bar = new ImageView[views.size()];
+            // 循环取得下方横线图片
+            for (int i = 0; i < views.size(); i++) {
+                bar[i] = (ImageView) linearLayout.getChildAt(i);
+                bar[i].setEnabled(true);
+                bar[i].setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View v) {
+                        int position = (Integer)v.getTag();
+                        setCurbar(position);
+                    }
+                });
+                // 设置位置tag，方便取出与当前位置对应
+                bar[i].setTag(i);
+            }
+            // 设置当面默认的位置
+            currentIndex = 0;
+            bar[currentIndex].setEnabled(false);
+
+/*
+
             mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swiperefreshlayout);
             mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
             mRecyclerView = (RecyclerView) view.findViewById(R.id.id_recyclerView);
@@ -99,10 +154,16 @@ public class PageFragment extends Fragment {
                     mSwipeRefreshLayout.setRefreshing(true);
                 }
             });
-
+*/
            // loadData();
             saveYouNews();
-            setAdapter();
+         //   setAdapter();
+            mRecyclerView = (RecyclerView) view.findViewById(R.id.id_recyclerView);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+            mRecyclerView.setLayoutManager(linearLayoutManager);
+            mAdapter = new SimpleRecyclerViewAdapter(getContext(), mDatas);//为适配器传入上下文和数据
+            mRecyclerView.setAdapter(mAdapter);
+            /*
             mSwipeRefreshLayout.setRefreshing(false);
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
@@ -127,9 +188,11 @@ public class PageFragment extends Fragment {
                             }
                         });
                         */
+            /*
                     Toast.makeText(getContext(),"刷新结束",Toast.LENGTH_LONG).show();
                 }
             });
+    */
         }
          else if(mPage==1){
             if(flag){
@@ -231,6 +294,31 @@ public class PageFragment extends Fragment {
         mDatas.add(new SaveNews("Go性能优化技巧 1/10",R.drawable.news_6,"来自 大数据那些事",R.drawable.ic_item_comment,R.drawable.ic_item_like,"666","666"));
         mDatas.add(new SaveNews("底部导航栏（Bottom navigation）设计规范指南",R.drawable.news_7,"来自 尤条子",R.drawable.ic_item_comment,R.drawable.ic_item_like,"666","666"));
 
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        setCurbar(position);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    public void setCurbar(int positon){
+        if (positon < 0 || positon > views.size() - 1 || currentIndex == positon) {
+            return;
+        }
+        bar[positon].setEnabled(false);
+        bar[currentIndex].setEnabled(true);
+        currentIndex = positon;
+        mViewPager.setCurrentItem(currentIndex);
     }
 
 }

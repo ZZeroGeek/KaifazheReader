@@ -1,5 +1,6 @@
 package org.zreo.kaifazhereader;
 
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -14,6 +15,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     public ViewPagerAdapter (ArrayList<View> views){
         this.views = views;
     }
+
 
     @Override
     public int getCount() {

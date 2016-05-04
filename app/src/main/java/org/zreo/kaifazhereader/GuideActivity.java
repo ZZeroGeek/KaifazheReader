@@ -21,7 +21,6 @@ public class GuideActivity extends Activity implements ViewPager.OnPageChangeLis
     private ViewPagerAdapter vpAdapter;
     private ArrayList<View> views;
     private View view1, view2, view3, view4;
-    private static final int[] page = {R.layout.guide_view01,R.layout.guide_view02,R.layout.guide_view03,R.layout.guide_view04};
     private ImageView[] bar;
     private int currentIndex;
     @Override
@@ -31,8 +30,9 @@ public class GuideActivity extends Activity implements ViewPager.OnPageChangeLis
         initView();
         initData();
 
-    }
 
+    }
+    //初始化滑动的页面
     private void initView() {
         LayoutInflater mLi = LayoutInflater.from(this);
         view1 = mLi.inflate(R.layout.guide_view01, null);
@@ -44,11 +44,11 @@ public class GuideActivity extends Activity implements ViewPager.OnPageChangeLis
         views = new ArrayList<View>();
         vpAdapter = new ViewPagerAdapter(views);
         startButton= (Button)view4. findViewById(R.id.startButton);
-    }
 
+    }
+    //初始化数据
     private void initData() {
-        initPoint();
-        mViewPager.setOnPageChangeListener(this);
+        mViewPager.addOnPageChangeListener(this);
         mViewPager.setAdapter(vpAdapter);
         views.add(view1);
         views.add(view2);
@@ -61,44 +61,41 @@ public class GuideActivity extends Activity implements ViewPager.OnPageChangeLis
             }
         });
         vpAdapter.notifyDataSetChanged();
-        initPoint();
+        initBar();
     }
 
-    private void initPoint() {
+
+
+
+    // 初始化下方横线
+    private void initBar() {
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.ll);
-
-        bar = new ImageView[page.length];
-
-        for (int i = 0; i < page.length; i++) {
+        bar = new ImageView[views.size()];
+        // 循环取得下方横线图片
+        for (int i = 0; i < views.size(); i++) {
             bar[i] = (ImageView) linearLayout.getChildAt(i);
             bar[i].setEnabled(true);
             bar[i].setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v) {
                     int position = (Integer)v.getTag();
-                    setCurDot(position);
-//                    setCurView(position);
-                         }
+                    setCurbar(position);
+                }
             });
+            // 设置位置tag，方便取出与当前位置对应
             bar[i].setTag(i);
         }
-
+        // 设置当面默认的位置
         currentIndex = 0;
         bar[currentIndex].setEnabled(false);
     }
-//    private void setCurView(int position){
-//        if (position < 0 || position >= page.length) {
-//            return;
-//        }
-//        mViewPager.setCurrentItem(position);
-//    }
-    private void setCurDot(int positon){
-        if (positon < 0 || positon > page.length - 1 || currentIndex == positon) {
+    //设置当前的下方横线的位置
+    public void setCurbar(int positon){
+        if (positon < 0 || positon > views.size() - 1 || currentIndex == positon) {
             return;
         }
         bar[positon].setEnabled(false);
         bar[currentIndex].setEnabled(true);
-
-//        currentIndex = positon;
+        currentIndex = positon;
         mViewPager.setCurrentItem(currentIndex);
     }
 
@@ -111,18 +108,26 @@ public class GuideActivity extends Activity implements ViewPager.OnPageChangeLis
 
     @Override
     public void onPageSelected(int position) {
-        setCurDot(position);
+        // 设置下方横线选中状态
+        setCurbar(position);
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
 
     }
+    //实现按钮的跳转
     private void startbutton() {
         Intent intent = new Intent();
         intent.setClass(GuideActivity.this,MainActivity.class);
         startActivity(intent);
         this.finish();
     }
- }
+
+    @Override
+    protected void onDestroy() {
+        mViewPager.removeOnPageChangeListener(this);
+        super.onDestroy();
+    }
+}
 

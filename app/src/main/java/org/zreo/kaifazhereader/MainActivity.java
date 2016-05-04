@@ -34,6 +34,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
@@ -56,6 +58,15 @@ public class MainActivity extends AppCompatActivity {
     private SimpleRecyclerViewAdapter mAdapter;
     private Button headerLandButton;
     Intent intent;
+
+    private Button startButton;
+//    private ViewPager mViewPager;
+    private ViewPagerAdapter vpAdapter;
+    private ArrayList<View> views;
+    private View view1, view2, view3, view4;
+    private static final int[] page = {R.layout.guide_view01,R.layout.guide_view02,R.layout.guide_view03,R.layout.guide_view04};
+    private ImageView[] bar;
+    private int currentIndex;
  private View navigation_header;
     private NavigationView nv_main_navigation;
     /**
@@ -98,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+//  initView();
+  //      initData();
 
     }
 
@@ -207,4 +219,5 @@ public class MainActivity extends AppCompatActivity {
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
     }
+
 }
